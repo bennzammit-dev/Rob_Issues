@@ -30,3 +30,56 @@ As a result, the world_manager node exits with errors indicating that no usable 
 This issue appears to be related to differences between Gazebo Classic and Gazebo Sim, particularly in how entity spawning is handled and how services are exposed to ROS 2. While the assignment and lecture material use Gazebo Sim, many existing examples and older code rely on Gazebo Classic, which leads to confusion and incompatibilities when trying to adapt code for Jazzy.
 
 In summary, the workspace builds and launches successfully, Gazebo Sim runs correctly, and the static world loads as expected. However, the dynamic spawning of robots and task elements does not function, leaving the simulation incomplete and preventing further progress on the assignment logic.
+
+Running instructions:
+
+Ensure Gazebo Sim (gz-sim) and ROS–Gazebo bridges are installed
+
+You can verify Gazebo Sim is installed by running:
+
+gz sim --version
+
+You can install by running:
+
+sudo apt update
+sudo apt install ros-jazzy-ros-gz-sim ros-jazzy-ros-gz-interfaces
+
+Create a ROS 2 workspace:
+
+mkdir -p ~/sortabot_ws/src
+cd ~/sortabot_ws/src
+
+Put repo in workspace such that you have sortabot_ws/src/sortabot
+
+Build the workspace:
+
+cd ~/sortabot_ws
+colcon build
+
+Source the workspace:
+
+Every new terminal that is used to run the project must source the workspace:
+
+source ~/sortabot_ws/install/setup.bash
+
+Run the simulation:
+
+Launch the simulation using the provided launch file:
+
+ros2 launch sortabot sortabot.launch.py
+
+This will start:
+
+Gazebo Sim with the base world file
+
+The world_manager node
+
+The robot_controller node
+
+The childabot node(s)
+
+At this point, Gazebo should open and load the static world defined in the .world file.
+
+The world file (sortabot_base.world) should load correctly and be visible in Gazebo.
+
+However the dynamically spawned entities (bins, objects, obstacles and bots) do not appear.
