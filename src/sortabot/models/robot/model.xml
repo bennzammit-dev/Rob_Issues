@@ -1,0 +1,153 @@
+<sdf version="1.9">
+  <model name="sortabot">
+    <static>false</static>
+
+    <!-- ================= BASE ================= -->
+    <link name="base_link">
+      <pose>0 0 0.2 0 0 0</pose>
+
+      <inertial>
+        <mass>12.0</mass>
+        <inertia>
+          <ixx>0.5</ixx>
+          <iyy>0.5</iyy>
+          <izz>0.5</izz>
+        </inertia>
+      </inertial>
+
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.6 0.4 0.2</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.6 0.4 0.2</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.6 0.0 0.6 1</ambient>
+        </material>
+      </visual>
+    </link>
+
+    <!-- ================= WHEELS ================= -->
+    <link name="left_wheel">
+      <pose>0 0.25 0.1 0 1.5708 0</pose>
+
+      <inertial>
+        <mass>1.0</mass>
+        <inertia>
+          <ixx>0.01</ixx>
+          <iyy>0.01</iyy>
+          <izz>0.01</izz>
+        </inertia>
+      </inertial>
+
+      <collision>
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.04</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <visual>
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.04</length>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="right_wheel">
+      <pose>0 -0.25 0.1 0 1.5708 0</pose>
+
+      <inertial>
+        <mass>1.0</mass>
+        <inertia>
+          <ixx>0.01</ixx>
+          <iyy>0.01</iyy>
+          <izz>0.01</izz>
+        </inertia>
+      </inertial>
+
+      <collision>
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.04</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <visual>
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.04</length>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- ================= JOINTS ================= -->
+    <joint name="left_wheel_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>left_wheel</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+
+    <joint name="right_wheel_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>right_wheel</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+
+    <!-- ================= LIDAR ================= -->
+    <link name="lidar_link">
+      <pose>0.25 0 0.25 0 0 0</pose>
+
+      <sensor name="lidar" type="gpu_lidar">
+        <update_rate>10</update_rate>
+        <topic>scan</topic>
+
+        <lidar>
+          <horizontal>
+            <samples>360</samples>
+            <min_angle>-3.1416</min_angle>
+            <max_angle>3.1416</max_angle>
+          </horizontal>
+          <range>
+            <min>0.1</min>
+            <max>10.0</max>
+          </range>
+        </lidar>
+      </sensor>
+    </link>
+
+    <!-- ================= SYSTEMS ================= -->
+    <plugin
+      filename="gz-sim-diff-drive-system"
+      name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>0.5</wheel_separation>
+      <wheel_radius>0.08</wheel_radius>
+      <odom_publish_frequency>30</odom_publish_frequency>
+    </plugin>
+
+  </model>
+</sdf>
+
